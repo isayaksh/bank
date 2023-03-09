@@ -1,5 +1,6 @@
 package me.isayaksh.bank.config.dummy;
 
+import me.isayaksh.bank.entity.account.Account;
 import me.isayaksh.bank.entity.member.Member;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,4 +34,28 @@ public class DummyObject {
                 .updateAt(LocalDateTime.now())
                 .build();
     }
+
+    protected Account newAccount(Long number, Long password, Member member) {
+        return Account.builder()
+                .number(number)
+                .password(password)
+                .balance(1000L)
+                .member(member)
+                .createAt(LocalDateTime.now())
+                .updateAt(LocalDateTime.now())
+                .build();
+    }
+
+    protected Account newMockAccount(Long id, Long number, Long password, Member member) {
+        return Account.builder()
+                .id(id)
+                .number(number)
+                .password(password)
+                .balance(1000L)
+                .member(member)
+                .createAt(LocalDateTime.now())
+                .updateAt(LocalDateTime.now())
+                .build();
+    }
+
 }
