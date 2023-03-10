@@ -2,11 +2,8 @@ package me.isayaksh.bank.config.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.isayaksh.bank.config.dummy.DummyObject;
-import me.isayaksh.bank.dto.member.MemberReqDto;
 import me.isayaksh.bank.dto.member.MemberReqDto.LoginReqDto;
-import me.isayaksh.bank.entity.member.Member;
 import me.isayaksh.bank.repository.MemberRepository;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,20 +11,19 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-@Transactional
-@ActiveProfiles("test")
 @AutoConfigureMockMvc
+@ActiveProfiles("test")
+@Sql("classpath:db/teardown.sql")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 class JwtAuthenticationFilterTest extends DummyObject {
 

@@ -31,7 +31,7 @@ public class MemberServiceTest extends DummyObject {
     private PasswordEncoder passwordEncoder;
     
     @Test
-    public void 회원가입() throws Exception {
+    public void join() throws Exception {
         // given
         JoinReqDto joinReqDto = new JoinReqDto();
         joinReqDto.setUsername("username");

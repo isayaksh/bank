@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.isayaksh.bank.entity.member.Member;
+import me.isayaksh.bank.handler.ex.CustomApiException;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -55,5 +56,31 @@ public class Account {
         this.member = member;
         this.createAt = createAt;
         this.updateAt = updateAt;
+    }
+
+    public void checkOwner(Long memberId) {
+        if(member.getId() != memberId) {
+            throw new CustomApiException("계좌 소유자가 아닙니다.");
+        }
+    }
+
+    public void deposit(Long amount) {
+        balance += amount;
+    }
+
+    public void checkBalance(Long amount) {
+        if(balance < amount) {
+            throw new CustomApiException("출금액이 잔액보다 많습니다.");
+        }
+    }
+
+    public void checkPassword(Long password) {
+        if(this.password != password) {
+            throw new CustomApiException("출금액이 잔액보다 많습니다.");
+        }
+    }
+
+    public void withdraw(Long amount) {
+        balance -= amount;
     }
 }

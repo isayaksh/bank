@@ -1,13 +1,19 @@
 package me.isayaksh.bank.config.dummy;
 
+import me.isayaksh.bank.dto.account.AccountReqDto;
+import me.isayaksh.bank.dto.account.AccountReqDto.AccountDepositReqDto;
+import me.isayaksh.bank.dto.account.AccountResDto;
+import me.isayaksh.bank.dto.account.AccountResDto.AccountDepositResDto;
 import me.isayaksh.bank.entity.account.Account;
 import me.isayaksh.bank.entity.member.Member;
+import me.isayaksh.bank.entity.transaction.Transaction;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 
 import static me.isayaksh.bank.entity.member.MemberRole.CUSTOMER;
+import static me.isayaksh.bank.entity.transaction.AccountStatus.DEPOSIT;
 
 public class DummyObject {
     protected Member newMember(String username, String fullName) {
@@ -46,15 +52,32 @@ public class DummyObject {
                 .build();
     }
 
-    protected Account newMockAccount(Long id, Long number, Long password, Member member) {
+    protected Account newMockAccount(Long id, Long number, Long balance, Member member) {
         return Account.builder()
                 .id(id)
                 .number(number)
-                .password(password)
-                .balance(1000L)
+                .password(1234L)
+                .balance(balance)
                 .member(member)
                 .createAt(LocalDateTime.now())
                 .updateAt(LocalDateTime.now())
+                .build();
+    }
+
+    protected Transaction newMockTransaction(Long id, Account account) {
+        account.deposit(100L);
+        return Transaction.builder()
+                .id(id)
+                .withdrawAccount(null)
+                .depositAccount(account)
+                .withdrawAccountBalance(null)
+                .depositAccountBalance(account.getBalance())
+                .amount(100L)
+                .status(DEPOSIT)
+                .sender("ATM")
+                .receiver(account.getNumber().toString())
+                .tel("01012345678")
+                .createAt(account.getCreateAt())
                 .build();
     }
 
