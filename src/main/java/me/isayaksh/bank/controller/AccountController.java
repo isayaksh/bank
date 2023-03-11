@@ -6,12 +6,10 @@ import me.isayaksh.bank.dto.ResponseDto;
 import me.isayaksh.bank.dto.account.AccountReqDto;
 import me.isayaksh.bank.dto.account.AccountReqDto.AccountDepositReqDto;
 import me.isayaksh.bank.dto.account.AccountReqDto.AccountRegisterReqDto;
+import me.isayaksh.bank.dto.account.AccountReqDto.AccountTransferReqDto;
 import me.isayaksh.bank.dto.account.AccountReqDto.AccountWithdrawReqDto;
 import me.isayaksh.bank.dto.account.AccountResDto;
-import me.isayaksh.bank.dto.account.AccountResDto.AccountDepositResDto;
-import me.isayaksh.bank.dto.account.AccountResDto.AccountListResDto;
-import me.isayaksh.bank.dto.account.AccountResDto.AccountRegisterResDto;
-import me.isayaksh.bank.dto.account.AccountResDto.AccountWithdrawResDto;
+import me.isayaksh.bank.dto.account.AccountResDto.*;
 import me.isayaksh.bank.service.AccountService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -62,6 +60,13 @@ public class AccountController {
                                       @AuthenticationPrincipal LoginMember loginMember) {
         AccountWithdrawResDto accountWithdrawResDto = accountService.withdraw(accountWithdrawReqDto, loginMember.getMember().getId());
         return new ResponseEntity<>(new ResponseDto<>(1, "출금 성공", accountWithdrawResDto), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/s/account/transfer")
+    public ResponseEntity<?> transfer(@RequestBody @Valid AccountTransferReqDto accountTransferReqDto, BindingResult bindingResult,
+                                      @AuthenticationPrincipal LoginMember loginMember) {
+        AccountTransferResDto accountWithdrawResDto = accountService.transfer(accountTransferReqDto, loginMember.getMember().getId());
+        return new ResponseEntity<>(new ResponseDto<>(1, "이체 성공", accountWithdrawResDto), HttpStatus.CREATED);
     }
 
 }

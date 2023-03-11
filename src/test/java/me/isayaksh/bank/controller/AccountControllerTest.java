@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import me.isayaksh.bank.config.dummy.DummyObject;
 import me.isayaksh.bank.dto.account.AccountReqDto;
 import me.isayaksh.bank.dto.account.AccountReqDto.AccountDepositReqDto;
+import me.isayaksh.bank.dto.account.AccountReqDto.AccountTransferReqDto;
 import me.isayaksh.bank.dto.account.AccountReqDto.AccountWithdrawReqDto;
 import me.isayaksh.bank.dto.account.AccountResDto;
 import me.isayaksh.bank.dto.account.AccountResDto.AccountDepositResDto;
@@ -151,6 +152,27 @@ class AccountControllerTest extends DummyObject {
         System.out.println("responseBody = " + responseBody);
         // then
 
+        resultActions.andExpect(status().isCreated());
+    }
+
+    @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    public void transfer_test() throws Exception {
+        // given
+        AccountTransferReqDto reqDto = new AccountTransferReqDto();
+        reqDto.setWithDrawNumber(1111L);
+        reqDto.setDepositNumber(7281L);
+        reqDto.setWithDrawPassword(1234L);
+        reqDto.setAmount(100L);
+        reqDto.setStatus("TRANSFER");
+        String requestBody = mapper.writeValueAsString(reqDto);
+
+        // when
+        ResultActions resultActions = mvc.perform(post("/api/s/account/transfer").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("responseBody = " + responseBody);
+
+        // then
         resultActions.andExpect(status().isCreated());
     }
 }

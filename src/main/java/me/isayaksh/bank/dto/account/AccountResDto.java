@@ -147,6 +147,8 @@ public class AccountResDto {
             private Long amount;
             private String tel;
             private String createdAt;
+            @JsonIgnore
+            private Long depositAccountBalance;
 
             public TransactionDto(Transaction transaction) {
                 this.id = transaction.getId();
@@ -155,6 +157,7 @@ public class AccountResDto {
                 this.receiver = transaction.getReceiver();
                 this.amount = transaction.getAmount();
                 this.createdAt = CustomDateUtil.toStringFormat(transaction.getCreateAt());
+                this.depositAccountBalance = transaction.getDepositAccountBalance();
             }
         }
     }
