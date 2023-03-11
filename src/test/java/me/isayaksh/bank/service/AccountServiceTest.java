@@ -2,10 +2,14 @@ package me.isayaksh.bank.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.isayaksh.bank.config.dummy.DummyObject;
+import me.isayaksh.bank.dto.account.AccountReqDto;
 import me.isayaksh.bank.dto.account.AccountReqDto.AccountDepositReqDto;
 import me.isayaksh.bank.dto.account.AccountReqDto.AccountRegisterReqDto;
+import me.isayaksh.bank.dto.account.AccountReqDto.AccountWithdrawReqDto;
+import me.isayaksh.bank.dto.account.AccountResDto;
 import me.isayaksh.bank.dto.account.AccountResDto.AccountDepositResDto;
 import me.isayaksh.bank.dto.account.AccountResDto.AccountRegisterResDto;
+import me.isayaksh.bank.dto.account.AccountResDto.AccountWithdrawResDto;
 import me.isayaksh.bank.entity.account.Account;
 import me.isayaksh.bank.entity.member.Member;
 import me.isayaksh.bank.entity.transaction.AccountStatus;
@@ -103,7 +107,7 @@ class AccountServiceTest extends DummyObject {
         when(accountRepository.findByNumber(any())).thenReturn(Optional.of(account1));
 
         Account account2 = newMockAccount(1L, 1111L, 1000L, member);
-        Transaction transaction = newMockTransaction(1L, account2);
+        Transaction transaction = newMockDepositTransaction(1L, account2);
         when(transactionRepository.save(any())).thenReturn(transaction);
 
 
@@ -141,7 +145,7 @@ class AccountServiceTest extends DummyObject {
 
         Member member2 = newMockMember(1L, "ssar", "쌀");
         Account account2 = newMockAccount(1L, 1111L, 1000L, member2);
-        Transaction transaction = newMockTransaction(1L, account2);
+        Transaction transaction = newMockDepositTransaction(1L, account2);
         when(transactionRepository.save(any())).thenReturn(transaction);
 
         AccountDepositResDto dto = accountService.deposit(accountDepositReqDto);
@@ -156,4 +160,50 @@ class AccountServiceTest extends DummyObject {
 
     }
 
+    @Test
+    public void withdraw_test() throws Exception {
+        // given
+        Member member = newMockMember(1L, "username", "userFullName");
+        Account account = newMockAccount(1L, 1234L, 1000L, member);
+
+        // when
+
+        // 0. 출금액 확인하기
+        Long amount = 100L;
+        if(amount <= 0L) {
+            throw new CustomApiException("0원 이하의 금액은 출금할 수 없습니다.");
+        }
+        assertThrows(CustomApiException.class, () -> {
+            Long amount_fail = 0L;
+            if(amount_fail <= 0L) {
+                throw new CustomApiException("0원 이하의 금액은 출금할 수 없습니다.");
+            }
+        });
+
+        // 2. 계좌와 계좌 주인 일치 여부
+        account.checkOwner(1L);
+        assertThrows(CustomApiException.class, () -> {
+            account.checkOwner(2L);
+        });
+
+        // 3. 비밀번호 일치 여부
+        account.checkPassword(1234L);
+        assertThrows(CustomApiException.class, () -> {
+           account.checkPassword(9999L);
+        });
+
+        // 4. 출금액과 잔액 비교 여부
+        account.checkBalance(100L);
+        assertThrows(CustomApiException.class, () -> {
+            account.checkBalance(9999L);
+        });
+
+        // 5. 출금
+        account.withdraw(100L);
+        assertThat(account.getBalance()).isEqualTo(900L);
+
+    }
+
 }
+
+    ;

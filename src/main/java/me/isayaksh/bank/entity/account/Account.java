@@ -75,12 +75,13 @@ public class Account {
     }
 
     public void checkPassword(Long password) {
-        if(this.password != password) {
-            throw new CustomApiException("출금액이 잔액보다 많습니다.");
+        if(!this.password.equals(password)) {
+            throw new CustomApiException("비밀 번호가 일치하지 않습니다.");
         }
     }
 
     public void withdraw(Long amount) {
+        checkBalance(amount);
         balance -= amount;
     }
 }

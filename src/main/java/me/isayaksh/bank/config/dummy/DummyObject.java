@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 
 import static me.isayaksh.bank.entity.member.MemberRole.CUSTOMER;
 import static me.isayaksh.bank.entity.transaction.AccountStatus.DEPOSIT;
+import static me.isayaksh.bank.entity.transaction.AccountStatus.WITHDRAW;
 
 public class DummyObject {
     protected Member newMember(String username, String fullName) {
@@ -64,7 +65,7 @@ public class DummyObject {
                 .build();
     }
 
-    protected Transaction newMockTransaction(Long id, Account account) {
+    protected Transaction newMockDepositTransaction(Long id, Account account) {
         account.deposit(100L);
         return Transaction.builder()
                 .id(id)
@@ -74,6 +75,23 @@ public class DummyObject {
                 .depositAccountBalance(account.getBalance())
                 .amount(100L)
                 .status(DEPOSIT)
+                .sender("ATM")
+                .receiver(account.getNumber().toString())
+                .tel("01012345678")
+                .createAt(account.getCreateAt())
+                .build();
+    }
+
+    protected Transaction newMockWithdrawTransaction(Long id, Account account) {
+        account.deposit(100L);
+        return Transaction.builder()
+                .id(id)
+                .withdrawAccount(account)
+                .depositAccount(null)
+                .withdrawAccountBalance(account.getBalance())
+                .depositAccountBalance(null)
+                .amount(100L)
+                .status(WITHDRAW)
                 .sender("ATM")
                 .receiver(account.getNumber().toString())
                 .tel("01012345678")
