@@ -4,12 +4,10 @@ import lombok.RequiredArgsConstructor;
 import me.isayaksh.bank.dto.account.AccountReqDto;
 import me.isayaksh.bank.dto.account.AccountReqDto.AccountDepositReqDto;
 import me.isayaksh.bank.dto.account.AccountReqDto.AccountRegisterReqDto;
+import me.isayaksh.bank.dto.account.AccountReqDto.AccountTransferReqDto;
 import me.isayaksh.bank.dto.account.AccountReqDto.AccountWithdrawReqDto;
 import me.isayaksh.bank.dto.account.AccountResDto;
-import me.isayaksh.bank.dto.account.AccountResDto.AccountDepositResDto;
-import me.isayaksh.bank.dto.account.AccountResDto.AccountListResDto;
-import me.isayaksh.bank.dto.account.AccountResDto.AccountRegisterResDto;
-import me.isayaksh.bank.dto.account.AccountResDto.AccountWithdrawResDto;
+import me.isayaksh.bank.dto.account.AccountResDto.*;
 import me.isayaksh.bank.entity.account.Account;
 import me.isayaksh.bank.entity.member.Member;
 import me.isayaksh.bank.entity.transaction.AccountStatus;
@@ -23,8 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static me.isayaksh.bank.entity.transaction.AccountStatus.DEPOSIT;
-import static me.isayaksh.bank.entity.transaction.AccountStatus.WITHDRAW;
+import static me.isayaksh.bank.entity.transaction.AccountStatus.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -108,6 +105,45 @@ public class AccountService {
         Transaction savedTransaction = transactionRepository.save(transaction);
         // 7. DTO 응답
         return new AccountWithdrawResDto(findWithdrawAccount, savedTransaction);
+    }
+
+    public AccountTransferResDto transfer(AccountTransferReqDto accountTransferReqDto, Long memberId) {
+        // 출금계좌 != 입금계좌
+        if(accountTransferReqDto.getWithDrawNumber().equals(accountTransferReqDto.getDepositNumber())){
+            throw new CustomApiException("입금계좌와 출금계좌가 동일할 순 없습니다.");
+        }
+        // 출금액 확인하기
+        if(accountTransferReqDto.getAmount() <= 0L) {
+            throw new CustomApiException("0원 이하의 금액은 출금할 수 없습니다.");
+        }
+        // 출금 계좌 조회
+        Account withdrawAccount = findAccountByNumber(accountTransferReqDto.getWithDrawNumber());
+        // 입금 계좌 조회
+        Account depositAccount = findAccountByNumber(accountTransferReqDto.getDepositNumber());
+        // 출금 계좌와 계좌 주인 일치 여부
+        withdrawAccount.checkOwner(memberId);
+        // 비밀번호 일치 여부
+        withdrawAccount.checkPassword(accountTransferReqDto.getWithDrawPassword());
+        // 출금액과 잔액 비교 여부
+        withdrawAccount.checkBalance(accountTransferReqDto.getAmount());
+        // 이체하기
+        withdrawAccount.withdraw(accountTransferReqDto.getAmount());
+        depositAccount.deposit(accountTransferReqDto.getAmount());
+        // 출금 내역 생성
+        Transaction transaction = Transaction.builder()
+                .withdrawAccount(withdrawAccount)
+                .depositAccount(depositAccount)
+                .withdrawAccountBalance(withdrawAccount.getBalance())
+                .depositAccountBalance(depositAccount.getBalance())
+                .amount(accountTransferReqDto.getAmount())
+                .status(TRANSFER)
+                .sender(withdrawAccount.getNumber().toString())
+                .receiver(depositAccount.getNumber().toString())
+                .build();
+        // 출금 내역 저장
+        Transaction savedTransaction = transactionRepository.save(transaction);
+
+        return new AccountTransferResDto(withdrawAccount, savedTransaction);
     }
 
     private Member findMemberByMemberId(Long memberId) {

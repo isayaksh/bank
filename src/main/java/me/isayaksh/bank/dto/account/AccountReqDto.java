@@ -67,5 +67,29 @@ public class AccountReqDto {
         private String status;
     }
 
+    @Getter @Setter
+    public static class AccountTransferReqDto {
+
+        @NotNull
+        @Digits(integer = 4, fraction = 4)
+        private Long withDrawNumber;
+
+        @NotNull
+        @Digits(integer = 4, fraction = 4)
+        private Long withDrawPassword;
+
+        @NotNull
+        @Digits(integer = 4, fraction = 4)
+        private Long depositNumber;
+
+        @NotNull
+        private Long amount;
+
+        @NotEmpty
+        @Pattern(regexp = "^(TRANSFER)$")
+        private String status;
+
+    }
+
 
 }

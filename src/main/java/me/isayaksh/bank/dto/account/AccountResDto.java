@@ -124,4 +124,39 @@ public class AccountResDto {
         }
     }
 
+    @Getter @Setter
+    public static class AccountTransferResDto {
+        private Long id;
+        private Long number;
+        private Long balance;
+        private TransactionDto transactionDto;
+
+        public AccountTransferResDto(Account account, Transaction transaction) {
+            this.id = account.getId();
+            this.number = account.getNumber();
+            this.balance = account.getBalance();
+            this.transactionDto = new TransactionDto(transaction);
+        }
+
+        @Getter @Setter
+        public class TransactionDto {
+            private Long id;
+            private String status;
+            private String sender;
+            private String receiver;
+            private Long amount;
+            private String tel;
+            private String createdAt;
+
+            public TransactionDto(Transaction transaction) {
+                this.id = transaction.getId();
+                this.status = transaction.getStatus().getStatus();
+                this.sender = transaction.getSender();
+                this.receiver = transaction.getReceiver();
+                this.amount = transaction.getAmount();
+                this.createdAt = CustomDateUtil.toStringFormat(transaction.getCreateAt());
+            }
+        }
+    }
+
 }

@@ -204,6 +204,46 @@ class AccountServiceTest extends DummyObject {
 
     }
 
+    @Test
+    public void transfer_test() throws Exception {
+        // given
+
+        Long amount = 100L;
+        Long memberId = 1L;
+
+        Member m1 = newMockMember(1L, "kim", "minjae");
+        Account a1 = newMockAccount(1L, 1111L, 2000L, m1);
+        Member m2 = newMockMember(2L, "son", "huengmin");
+        Account a2 = newMockAccount(2L, 2222L, 2000L, m2);
+        // when
+
+        // 출금계좌 != 입금계좌
+        if(a1.getNumber().equals(a2.getNumber())){
+            throw new CustomApiException("입금계좌와 출금계좌가 동일할 순 없습니다.");
+        }
+        // 출금액 확인하기
+        if(amount <= 0L) {
+            throw new CustomApiException("0원 이하의 금액은 출금할 수 없습니다.");
+        }
+        // 출금 계좌, 입금 계좌 조회 → Repository
+//        Account withdrawAccount = findAccountByNumber(accountTransferReqDto.getWithDrawNumber());
+//        Account depositAccount = findAccountByNumber(accountTransferReqDto.getDepositNumber());
+
+        // 출금 계좌와 계좌 주인 일치 여부
+        a1.checkOwner(memberId);
+        // 비밀번호 일치 여부
+        a1.checkPassword(1234L);
+        // 출금액과 잔액 비교 여부
+        a1.checkBalance(amount);
+        // 이체하기
+        a1.withdraw(amount);
+        a2.deposit(amount);
+
+        // then
+        assertThat(a1.getBalance()).isEqualTo(1900L);
+        assertThat(a2.getBalance()).isEqualTo(2100L);
+    }
+
 }
 
     ;
