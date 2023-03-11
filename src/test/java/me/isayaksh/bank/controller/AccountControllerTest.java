@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import me.isayaksh.bank.config.dummy.DummyObject;
 import me.isayaksh.bank.dto.account.AccountReqDto;
 import me.isayaksh.bank.dto.account.AccountReqDto.AccountDepositReqDto;
+import me.isayaksh.bank.dto.account.AccountReqDto.AccountWithdrawReqDto;
 import me.isayaksh.bank.dto.account.AccountResDto;
 import me.isayaksh.bank.dto.account.AccountResDto.AccountDepositResDto;
 import me.isayaksh.bank.entity.member.Member;
@@ -46,7 +47,7 @@ class AccountControllerTest extends DummyObject {
         Member member = newMember("ssar", "쌀");
         memberRepository.save(member);
 
-        accountRepository.save(newAccount(7282L, 1234L, member));
+        accountRepository.save(newAccount(1111L, 1234L, member));
         accountRepository.save(newAccount(7777L, 1234L, member));
         accountRepository.save(newAccount(1357L, 1234L, member));
         accountRepository.save(newAccount(9876L, 1234L, member));
@@ -131,7 +132,25 @@ class AccountControllerTest extends DummyObject {
 
         // then
         resultActions.andExpect(status().isCreated());
+    }
 
+    @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    public void withdraw_test() throws Exception {
+        // given
+        AccountWithdrawReqDto dto = new AccountWithdrawReqDto();
+        dto.setNumber(1111L);
+        dto.setPassword(1234L);
+        dto.setAmount(100L);
+        dto.setStatus("WITHDRAW");
+        String requestBody = mapper.writeValueAsString(dto);
+        // when
 
+        ResultActions resultActions = mvc.perform(post("/api/s/account/withdraw").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("responseBody = " + responseBody);
+        // then
+
+        resultActions.andExpect(status().isCreated());
     }
 }
