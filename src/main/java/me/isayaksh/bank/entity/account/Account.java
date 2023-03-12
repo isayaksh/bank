@@ -59,7 +59,8 @@ public class Account {
     }
 
     public void checkOwner(Long memberId) {
-        if(member.getId().equals(memberId)) {
+        System.out.println("test : member.getId : " + member.getId() + ", memberId : " + memberId);
+        if(!member.getId().equals(memberId)) {
             throw new CustomApiException("계좌 소유자가 아닙니다.");
         }
     }

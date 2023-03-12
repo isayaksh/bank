@@ -115,12 +115,13 @@ class AccountControllerTest extends DummyObject {
         // then
     }
 
+
     @Test
     public void deposit_test() throws Exception {
         // given
 
         AccountDepositReqDto dto = new AccountDepositReqDto();
-        dto.setNumber(7282L);
+        dto.setNumber(1111L);
         dto.setAmount(100L);
         dto.setStatus("DEPOSIT");
         dto.setTel("01012345678");

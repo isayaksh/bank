@@ -36,4 +36,8 @@ out/
 ### VS Code ###
 .vscode/
 
-### key ###
+### ignore file ###
+fetch-test.html
+
+### QueryDSL ###
+/src/main/generated/

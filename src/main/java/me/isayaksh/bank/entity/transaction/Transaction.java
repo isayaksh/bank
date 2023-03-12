@@ -27,11 +27,9 @@ public class Transaction {
     private Long id;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "account_id", insertable = false, updatable = false)
     private Account withdrawAccount;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "account_id", insertable = false, updatable = false)
     private Account depositAccount;
 
     @Column(nullable = false)
