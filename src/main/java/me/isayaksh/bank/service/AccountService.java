@@ -16,6 +16,7 @@ import me.isayaksh.bank.handler.ex.CustomApiException;
 import me.isayaksh.bank.repository.AccountRepository;
 import me.isayaksh.bank.repository.MemberRepository;
 import me.isayaksh.bank.repository.TransactionRepository;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -144,6 +145,17 @@ public class AccountService {
         Transaction savedTransaction = transactionRepository.save(transaction);
 
         return new AccountTransferResDto(withdrawAccount, savedTransaction);
+    }
+
+    public AccountDetailResDto findAccountDetail(Long number, Long memberId, Pageable pageable) {
+        // 계좌 번호로 계좌 조회
+        Account findAccount = findAccountByNumber(number);
+        // 계좌와 소유자 일치 여부
+        findAccount.checkOwner(memberId);
+
+        List<Transaction> transactionList = transactionRepository.findTransactionList(findAccount.getId(), "ALL", pageable.getPageNumber());
+        return new AccountDetailResDto(findAccount, transactionList);
+
     }
 
     private Member findMemberByMemberId(Long memberId) {

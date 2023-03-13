@@ -11,6 +11,7 @@ import me.isayaksh.bank.dto.account.AccountReqDto.AccountWithdrawReqDto;
 import me.isayaksh.bank.dto.account.AccountResDto;
 import me.isayaksh.bank.dto.account.AccountResDto.*;
 import me.isayaksh.bank.service.AccountService;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -67,6 +68,16 @@ public class AccountController {
                                       @AuthenticationPrincipal LoginMember loginMember) {
         AccountTransferResDto accountWithdrawResDto = accountService.transfer(accountTransferReqDto, loginMember.getMember().getId());
         return new ResponseEntity<>(new ResponseDto<>(1, "이체 성공", accountWithdrawResDto), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/s/account/{number}/")
+    public ResponseEntity<?> accountDetail(@PathVariable Long number,
+                                           @AuthenticationPrincipal LoginMember loginMember,
+                                           Pageable pageable) {
+
+        AccountDetailResDto accountDetailResDto = accountService.findAccountDetail(number, loginMember.getMember().getId(), pageable);
+
+        return new ResponseEntity<>(new ResponseDto<>(1, "계좌 상세보기 성공", accountDetailResDto), HttpStatus.OK);
     }
 
 }

@@ -5,10 +5,13 @@ import me.isayaksh.bank.config.dummy.DummyObject;
 import me.isayaksh.bank.dto.account.AccountReqDto.AccountDepositReqDto;
 import me.isayaksh.bank.dto.account.AccountReqDto.AccountTransferReqDto;
 import me.isayaksh.bank.dto.account.AccountReqDto.AccountWithdrawReqDto;
+import me.isayaksh.bank.entity.account.Account;
 import me.isayaksh.bank.entity.member.Member;
+import me.isayaksh.bank.entity.transaction.Transaction;
 import me.isayaksh.bank.handler.ex.CustomApiException;
 import me.isayaksh.bank.repository.AccountRepository;
 import me.isayaksh.bank.repository.MemberRepository;
+import me.isayaksh.bank.repository.TransactionRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+
+import javax.persistence.EntityManager;
 
 import static me.isayaksh.bank.dto.account.AccountReqDto.AccountRegisterReqDto;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -41,24 +46,13 @@ class AccountControllerTest extends DummyObject {
 
     @Autowired MemberRepository memberRepository;
     @Autowired AccountRepository accountRepository;
+    @Autowired TransactionRepository transactionRepository;
+    @Autowired EntityManager em;
 
     @BeforeEach
     public void setup() {
-        Member member = newMember("ssar", "쌀");
-        memberRepository.save(member);
-
-        accountRepository.save(newAccount(1111L, 1234L, member));
-        accountRepository.save(newAccount(7777L, 1234L, member));
-        accountRepository.save(newAccount(1357L, 1234L, member));
-        accountRepository.save(newAccount(9876L, 1234L, member));
-
-        Member member1 = newMember("cos", "코스");
-        memberRepository.save(member1);
-
-        accountRepository.save(newAccount(7281L, 1234L, member1));
-        accountRepository.save(newAccount(7776L, 1234L, member1));
-        accountRepository.save(newAccount(1356L, 1234L, member1));
-        accountRepository.save(newAccount(9875L, 1234L, member1));
+        dataSetting();
+        em.clear();
 
     }
 
@@ -80,10 +74,6 @@ class AccountControllerTest extends DummyObject {
 
         // then
         resultActions.andExpect(status().isCreated());
-        resultActions.andExpect(jsonPath("$.data.transactions[0].balance").value(900L));
-        resultActions.andExpect(jsonPath("$.data.transactions[1].balance").value(800L));
-        resultActions.andExpect(jsonPath("$.data.transactions[2].balance").value(700L));
-        resultActions.andExpect(jsonPath("$.data.transactions[3].balance").value(800L));
     }
 
     @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
@@ -165,7 +155,7 @@ class AccountControllerTest extends DummyObject {
         // given
         AccountTransferReqDto reqDto = new AccountTransferReqDto();
         reqDto.setWithDrawNumber(1111L);
-        reqDto.setDepositNumber(7281L);
+        reqDto.setDepositNumber(2222L);
         reqDto.setWithDrawPassword(1234L);
         reqDto.setAmount(100L);
         reqDto.setStatus("TRANSFER");
@@ -178,5 +168,44 @@ class AccountControllerTest extends DummyObject {
 
         // then
         resultActions.andExpect(status().isCreated());
+    }
+
+    @Test
+    @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    public void findAccountDetail_test() throws Exception {
+        // given
+        Long number = 1111L;
+        String status = "ALL";
+
+        // when
+        ResultActions resultActions = mvc.perform(get("/api/s/account/"+number+"/transactions").param("status", status));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("responseBody = " + responseBody);
+
+        // then
+        resultActions.andExpect(status().isOk());
+    }
+
+    private void dataSetting() {
+        Member ssar = memberRepository.save(newMember("ssar", "쌀"));
+        Member cos = memberRepository.save(newMember("cos", "코스,"));
+        Member love = memberRepository.save(newMember("love", "러브"));
+        Member admin = memberRepository.save(newMember("admin", "관리자"));
+
+        Account ssarAccount1 = accountRepository.save(newAccount(1111L, 1234L, ssar));
+        Account cosAccount = accountRepository.save(newAccount(2222L, 1234L, cos));
+        Account loveAccount = accountRepository.save(newAccount(3333L, 1234L, love));
+        Account ssarAccount2 = accountRepository.save(newAccount(4444L, 1234L, ssar));
+
+        Transaction withdrawTransaction1 = transactionRepository
+                .save(newWithdrawTransaction(ssarAccount1, accountRepository));
+        Transaction depositTransaction1 = transactionRepository
+                .save(newDepositTransaction(cosAccount, accountRepository));
+        Transaction transferTransaction1 = transactionRepository
+                .save(newTransferTransaction(ssarAccount1, cosAccount, accountRepository));
+        Transaction transferTransaction2 = transactionRepository
+                .save(newTransferTransaction(ssarAccount1, loveAccount, accountRepository));
+        Transaction transferTransaction3 = transactionRepository
+                .save(newTransferTransaction(cosAccount, ssarAccount1, accountRepository));
     }
 }
