@@ -1,19 +1,15 @@
 package me.isayaksh.bank.handler.aop;
 
-import me.isayaksh.bank.dto.ResponseDto;
 import me.isayaksh.bank.handler.ex.CustomValidationException;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @Component
 @Aspect

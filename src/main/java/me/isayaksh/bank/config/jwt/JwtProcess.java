@@ -2,12 +2,10 @@ package me.isayaksh.bank.config.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import me.isayaksh.bank.config.auth.LoginMember;
 import me.isayaksh.bank.entity.member.Member;
 import me.isayaksh.bank.entity.member.MemberRole;
-import me.isayaksh.bank.util.CustomResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

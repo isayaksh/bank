@@ -25,7 +25,7 @@ public class TransactionController {
                                              Pageable pageable,
                                              @AuthenticationPrincipal LoginMember loginMember) {
 
-        TransactionListResDto transactionListResDto = transactionService.find(loginMember.getMember().getId(), number, status, pageable);
+        TransactionListResDto transactionListResDto = transactionService.findAll(loginMember.getMember().getId(), number, status, pageable);
         return new ResponseEntity<>(new ResponseDto<>(1, "거래 내역 조회 성공", transactionListResDto), HttpStatus.OK);
     }
 }

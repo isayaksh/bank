@@ -1,16 +1,13 @@
 package me.isayaksh.bank.service;
 
 import lombok.RequiredArgsConstructor;
-import me.isayaksh.bank.dto.account.AccountReqDto;
 import me.isayaksh.bank.dto.account.AccountReqDto.AccountDepositReqDto;
 import me.isayaksh.bank.dto.account.AccountReqDto.AccountRegisterReqDto;
 import me.isayaksh.bank.dto.account.AccountReqDto.AccountTransferReqDto;
 import me.isayaksh.bank.dto.account.AccountReqDto.AccountWithdrawReqDto;
-import me.isayaksh.bank.dto.account.AccountResDto;
 import me.isayaksh.bank.dto.account.AccountResDto.*;
 import me.isayaksh.bank.entity.account.Account;
 import me.isayaksh.bank.entity.member.Member;
-import me.isayaksh.bank.entity.transaction.AccountStatus;
 import me.isayaksh.bank.entity.transaction.Transaction;
 import me.isayaksh.bank.handler.ex.CustomApiException;
 import me.isayaksh.bank.repository.AccountRepository;
@@ -34,33 +31,45 @@ public class AccountService {
     private final TransactionRepository transactionRepository;
 
     @Transactional
-    public AccountRegisterResDto register(Long memberId, AccountRegisterReqDto dto) {
+    public AccountRegisterResDto register(Long memberId, AccountRegisterReqDto accountRegisterReqDto) {
+        // 유저정보 조회
         Member findMember = findMemberByMemberId(memberId);
-        if(accountRepository.existsByNumber(dto.getNumber())){ throw new CustomApiException("등록하려는 계좌가 이미 존재합니다."); }
-        Account savedAccount = accountRepository.save(dto.toEntity(findMember));
+        // 계좌번호 중복 확인
+        if(accountRepository.existsByNumber(accountRegisterReqDto.getNumber())){
+            throw new CustomApiException("동일한 계좌가 이미 존재합니다.");
+        }
+        // 계좌 생성 및 저장
+        Account savedAccount = accountRepository.save(accountRegisterReqDto.toEntity(findMember));
         return new AccountRegisterResDto(savedAccount);
     }
 
     public AccountListResDto findAllByMemberId(Long memberId) {
+        // 유저정보 조회
         Member findMember = findMemberByMemberId(memberId);
-        List<Account> accounts = accountRepository.findAllByMemberId(findMember.getId());
+        // 유저가 소유한 모든 계좌 조회
+        List<Account> accounts = accountRepository.findAllByMemberId(memberId);
         return new AccountListResDto(findMember, accounts);
     }
 
     @Transactional
     public void delete(Long number, Long memberId) {
+        // 계좌 번호로 계좌 조회
         Account findAccount = findAccountByNumber(number);
+        // 계좌와 소유자 간 일치 여부 검증
         findAccount.checkOwner(memberId);
+        // 계좌 삭제
         accountRepository.deleteById(findAccount.getId());
     }
 
     @Transactional
     public AccountDepositResDto deposit(AccountDepositReqDto accountDepositReqDto) {
-        if(accountDepositReqDto.getAmount() <= 0L) {
-            throw new CustomApiException("0원 이하의 금액은 입금할 수 없습니다.");
-        }
+        // 출금액 확인
+        checkAmountValue(accountDepositReqDto.getAmount());
+        // 입금 계좌 조회
         Account findDepositAccount = findAccountByNumber(accountDepositReqDto.getNumber());
+        // 입금 계좌에 amount 입금
         findDepositAccount.deposit(accountDepositReqDto.getAmount());
+        // 입금 내역
         Transaction transaction = Transaction.builder()
                 .depositAccount(findDepositAccount)
                 .withdrawAccount(null)
@@ -72,26 +81,25 @@ public class AccountService {
                 .receiver(findDepositAccount.getNumber().toString())
                 .tel(accountDepositReqDto.getTel())
                 .build();
+        // 입금 내역 저장
         Transaction savedTransaction = transactionRepository.save(transaction);
         return new AccountDepositResDto(findDepositAccount, savedTransaction);
     }
 
     public AccountWithdrawResDto withdraw(AccountWithdrawReqDto accountWithdrawReqDto, Long memberId) {
-        // 0. 출금액 확인하기
-        if(accountWithdrawReqDto.getAmount() <= 0L) {
-            throw new CustomApiException("0원 이하의 금액은 출금할 수 없습니다.");
-        }
-        // 1. 계좌 찾기
+        // 출금액 확인하기
+        checkAmountValue(accountWithdrawReqDto.getAmount());
+        // 계좌 찾기
         Account findWithdrawAccount = findAccountByNumber(accountWithdrawReqDto.getNumber());
-        // 2. 계좌와 계좌 주인 일치 여부
+        // 계좌와 계좌 주인 일치 여부
         findWithdrawAccount.checkOwner(memberId);
-        // 3. 비밀번호 일치 여부
+        // 비밀번호 일치 여부
         findWithdrawAccount.checkPassword(accountWithdrawReqDto.getPassword());
-        // 4. 출금액과 잔액 비교 여부
+        // 출금액과 잔액 비교 여부
         findWithdrawAccount.checkBalance(accountWithdrawReqDto.getAmount());
-        // 5. 출금
+        // 출금
         findWithdrawAccount.withdraw(accountWithdrawReqDto.getAmount());
-        // 6. 출금 내역
+        // 출금 내역
         Transaction transaction = Transaction.builder()
                 .depositAccount(null)
                 .withdrawAccount(findWithdrawAccount)
@@ -102,9 +110,9 @@ public class AccountService {
                 .sender(findWithdrawAccount.getNumber().toString())
                 .receiver("ATM")
                 .build();
-        // 6-1. 출금내역 저장
+        // 출금내역 저장
         Transaction savedTransaction = transactionRepository.save(transaction);
-        // 7. DTO 응답
+        // DTO 응답
         return new AccountWithdrawResDto(findWithdrawAccount, savedTransaction);
     }
 
@@ -114,9 +122,7 @@ public class AccountService {
             throw new CustomApiException("입금계좌와 출금계좌가 동일할 순 없습니다.");
         }
         // 출금액 확인하기
-        if(accountTransferReqDto.getAmount() <= 0L) {
-            throw new CustomApiException("0원 이하의 금액은 출금할 수 없습니다.");
-        }
+        checkAmountValue(accountTransferReqDto.getAmount());
         // 출금 계좌 조회
         Account withdrawAccount = findAccountByNumber(accountTransferReqDto.getWithDrawNumber());
         // 입금 계좌 조회
@@ -152,7 +158,7 @@ public class AccountService {
         Account findAccount = findAccountByNumber(number);
         // 계좌와 소유자 일치 여부
         findAccount.checkOwner(memberId);
-
+        // 계좌의 모든 거래 내역 조회
         List<Transaction> transactionList = transactionRepository.findTransactionList(findAccount.getId(), "ALL", pageable.getPageNumber());
         return new AccountDetailResDto(findAccount, transactionList);
 
@@ -164,6 +170,12 @@ public class AccountService {
 
     private Account findAccountByNumber(Long number) {
         return accountRepository.findByNumber(number).orElseThrow(() -> new CustomApiException("해당 계좌를 찾을 수 없습니다."));
+    }
+
+    private void checkAmountValue(Long amount) {
+        if(amount <= 0L) {
+            throw new CustomApiException("0원 이하의 금액은 입금할 수 없습니다.");
+        }
     }
 
 }

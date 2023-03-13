@@ -21,13 +21,15 @@ public class TransactionService {
     private final TransactionRepository transactionRepository;
     private final AccountRepository accountRepository;
 
-    public TransactionListResDto find(Long memberId, Long accountNumber, String status , Pageable pageable) {
-        Account accountPs = accountRepository.findByNumber(accountNumber).orElseThrow(() -> new CustomApiException("해당 계좌가 존재하지 않습니다."));
-
-        accountPs.checkOwner(memberId);
-
-        List<Transaction> transactionList = transactionRepository.findTransactionList(accountPs.getId(), status, pageable.getPageNumber());
-        return new TransactionListResDto(accountPs, transactionList);
+    public TransactionListResDto findAll(Long memberId, Long accountNumber, String status , Pageable pageable) {
+        // 계좌 번호로 계좌 조회
+        Account findAccount = accountRepository.findByNumber(accountNumber).orElseThrow(() -> new CustomApiException("해당 계좌가 존재하지 않습니다."));
+        // 계좌와 소유자 일치 여부 검증
+        findAccount.checkOwner(memberId);
+        // 계좌의 거래 내역 조회
+        List<Transaction> transactionList = transactionRepository.findTransactionList(findAccount.getId(), status, pageable.getPageNumber());
+        // 계좌의 거래 내역 반환
+        return new TransactionListResDto(findAccount, transactionList);
     }
 
 }

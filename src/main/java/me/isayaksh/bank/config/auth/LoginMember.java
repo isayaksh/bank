@@ -8,7 +8,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 
 @Getter
 @RequiredArgsConstructor
@@ -23,7 +22,7 @@ public class LoginMember implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(() -> "ROLE_" + member.getRole());
+        authorities.add(() -> member.getRole().toString());
         return authorities;
     }
 

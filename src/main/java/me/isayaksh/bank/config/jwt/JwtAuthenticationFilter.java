@@ -2,9 +2,7 @@ package me.isayaksh.bank.config.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.isayaksh.bank.config.auth.LoginMember;
-import me.isayaksh.bank.dto.member.MemberReqDto;
 import me.isayaksh.bank.dto.member.MemberReqDto.LoginReqDto;
-import me.isayaksh.bank.dto.member.MemberResDto;
 import me.isayaksh.bank.dto.member.MemberResDto.LoginResDto;
 import me.isayaksh.bank.util.CustomResponseUtil;
 import org.slf4j.Logger;
@@ -16,7 +14,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -31,7 +28,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     public JwtAuthenticationFilter(AuthenticationManager authenticationManager) {
         super(authenticationManager);
-        setFilterProcessesUrl("/api/login");
+        setFilterProcessesUrl("/api/login"); // 로그인 URL 지정
         this.authenticationManager = authenticationManager;
     }
 

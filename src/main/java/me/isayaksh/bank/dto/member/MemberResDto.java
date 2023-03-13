@@ -6,8 +6,6 @@ import lombok.ToString;
 import me.isayaksh.bank.entity.member.Member;
 import me.isayaksh.bank.util.CustomDateUtil;
 
-import java.util.Date;
-
 public class MemberResDto {
 
     @Getter

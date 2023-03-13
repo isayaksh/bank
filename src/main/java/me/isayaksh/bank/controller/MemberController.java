@@ -3,10 +3,8 @@ package me.isayaksh.bank.controller;
 import lombok.RequiredArgsConstructor;
 import me.isayaksh.bank.dto.ResponseDto;
 import me.isayaksh.bank.dto.member.MemberReqDto.JoinReqDto;
-import me.isayaksh.bank.dto.member.MemberResDto;
 import me.isayaksh.bank.dto.member.MemberResDto.JoinRespDto;
 import me.isayaksh.bank.service.MemberService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,11 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
 @RequiredArgsConstructor

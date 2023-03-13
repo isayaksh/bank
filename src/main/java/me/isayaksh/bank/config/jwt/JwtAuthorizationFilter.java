@@ -28,7 +28,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         String header = request.getHeader(JwtVO.HEADER);
 
         if(isExist(header)) {
-            String jwt = header.replace(JwtVO.TOKEN_PREFIX, "");
+            String jwt = header.replace(JwtVO.TOKEN_PREFIX, ""); // "BEARER " 제거
             LoginMember loginMember = JwtProcess.verify(jwt);
 
             // 임시 세션 강제 주입 (생명주기 request ~ response)

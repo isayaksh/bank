@@ -1,9 +1,5 @@
 package me.isayaksh.bank.config.dummy;
 
-import me.isayaksh.bank.dto.account.AccountReqDto;
-import me.isayaksh.bank.dto.account.AccountReqDto.AccountDepositReqDto;
-import me.isayaksh.bank.dto.account.AccountResDto;
-import me.isayaksh.bank.dto.account.AccountResDto.AccountDepositResDto;
 import me.isayaksh.bank.entity.account.Account;
 import me.isayaksh.bank.entity.member.Member;
 import me.isayaksh.bank.entity.transaction.Transaction;

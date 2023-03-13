@@ -74,7 +74,7 @@ public class SecurityConfig {
 
         http.authorizeRequests()
                 .antMatchers("/api/s/**").authenticated()
-                .antMatchers("/api/admin/**").hasRole(""+ADMIN)
+                .antMatchers("/api/admin/**").hasRole(ADMIN.toString())
                 .anyRequest().permitAll();
 
         return http.build();
@@ -85,7 +85,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedHeader("*"); // 모든 헤더 허용
         configuration.addAllowedMethod("*"); // GET, POST, PUT, DELETE
-        configuration.addAllowedOriginPattern("*"); // 모든 IP 주소 허용(*) → 프론 IP 주소만 허용(?)
+        configuration.addAllowedOriginPattern("*"); // 모든 IP 주소 허용(*) → 프론트 IP 주소만 허용(?)
         configuration.setAllowCredentials(true); // 클라이언트에서 쿠키 요청 허용
         configuration.addExposedHeader("Authorization"); // 서버에서 제공하는 response 의 헤더 "Authorization" 에 대한 접근을 허용
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

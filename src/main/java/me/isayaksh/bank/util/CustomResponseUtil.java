@@ -1,6 +1,5 @@
 package me.isayaksh.bank.util;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.isayaksh.bank.dto.ResponseDto;
 import org.slf4j.Logger;

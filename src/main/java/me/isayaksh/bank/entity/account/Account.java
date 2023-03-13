@@ -36,7 +36,6 @@ public class Account {
     private Long balance;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "member_id")
     private Member member;
 
     @CreatedDate // Insert
@@ -59,7 +58,6 @@ public class Account {
     }
 
     public void checkOwner(Long memberId) {
-        System.out.println("test : member.getId : " + member.getId() + ", memberId : " + memberId);
         if(!member.getId().equals(memberId)) {
             throw new CustomApiException("계좌 소유자가 아닙니다.");
         }
