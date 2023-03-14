@@ -24,17 +24,10 @@
 #
 ## 🧷 기능 정리
 
-### Member
-
 |기능|요청 URL|문서|테스트|
 |:-:|:-:|:-:|:-:|
 |회원가입|`{SERVER}/api/join`|[회원가입 doc](https://github.com/isayaksh/bank/blob/master/docs/join.md)|O|
 |로그인|`{SERVER}/api/login`|[로그인 doc](https://github.com/isayaksh/bank/blob/master/docs/login.md)|O|
-
-
-### Account
-|기능|요청 URL|문서|테스트|
-|:-:|:-:|:-:|:-:|
 |계좌등록|`{SERVER}/api/s/account`|[계좌등록 doc](https://github.com/isayaksh/bank/blob/master/docs/registerAccount.md)|O|
 |계좌목록 조회|`{SERVER}/api/s/account/login-user`|[계좌목록 조회 doc](https://github.com/isayaksh/bank/blob/master/docs/findAccountList.md)|O|
 |계좌 삭제|`{SERVER}/api/s/account/{number}`|[계좌 삭제 doc](https://github.com/isayaksh/bank/blob/master/docs/deleteAccount.md)|O|
@@ -43,9 +36,4 @@
 |계좌이체|`{SERVER}/api/s/account/transfer`|[계좌이체 doc](https://github.com/isayaksh/bank/blob/master/docs/transfer.md)|O|
 |계좌 상세보기|`{SERVER}/api/s/account/{number}`|[계좌 상세보기 doc](https://github.com/isayaksh/bank/blob/master/docs/findAccountDetail.md)|O|
 |계좌 비밀번호 갱신|`{SERVER}/api/s/account/password`|[계좌 비밀번호 갱신 doc](https://github.com/isayaksh/bank/blob/master/docs/resetPassword.md)|O|
-
-### Transaction
-
-|기능|요청 URL|문서|테스트|
-|:-:|:-:|:-:|:-:|
 |거래내역 조회|`{SERVER}/api/s/account/{number}/transactions`|[거래내역 조회 doc](https://github.com/isayaksh/bank/blob/master/docs/findTransactionList.md)|O|
