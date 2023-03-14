@@ -3,10 +3,8 @@ package me.isayaksh.bank.controller;
 import lombok.RequiredArgsConstructor;
 import me.isayaksh.bank.config.auth.LoginMember;
 import me.isayaksh.bank.dto.ResponseDto;
-import me.isayaksh.bank.dto.account.AccountReqDto.AccountDepositReqDto;
-import me.isayaksh.bank.dto.account.AccountReqDto.AccountRegisterReqDto;
-import me.isayaksh.bank.dto.account.AccountReqDto.AccountTransferReqDto;
-import me.isayaksh.bank.dto.account.AccountReqDto.AccountWithdrawReqDto;
+import me.isayaksh.bank.dto.account.AccountReqDto;
+import me.isayaksh.bank.dto.account.AccountReqDto.*;
 import me.isayaksh.bank.dto.account.AccountResDto.*;
 import me.isayaksh.bank.service.AccountService;
 import org.springframework.data.domain.Pageable;
@@ -76,6 +74,13 @@ public class AccountController {
         AccountDetailResDto accountDetailResDto = accountService.findAccountDetail(number, loginMember.getMember().getId(), pageable);
 
         return new ResponseEntity<>(new ResponseDto<>(1, "계좌 상세보기 성공", accountDetailResDto), HttpStatus.OK);
+    }
+
+    @PostMapping("/s/account/password")
+    public ResponseEntity<?> resetPassword(@RequestBody @Valid AccountResetPasswordReqDto accountResetPasswordReqDto, BindingResult bindingResult,
+                                           @AuthenticationPrincipal LoginMember loginMember) {
+        AccountResetPasswordResDto accountResetPasswordResDto = accountService.resetPassword(accountResetPasswordReqDto, loginMember.getMember().getId());
+        return new ResponseEntity<>(new ResponseDto<>(1, "계좌 비밀번호 갱신 성공", accountResetPasswordResDto), HttpStatus.OK);
     }
 
 }

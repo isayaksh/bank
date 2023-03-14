@@ -1,6 +1,7 @@
 package me.isayaksh.bank.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import me.isayaksh.bank.config.dummy.DummyObject;
 import me.isayaksh.bank.dto.member.MemberReqDto.JoinReqDto;
 import me.isayaksh.bank.entity.member.Member;
@@ -49,7 +50,6 @@ public class MemberControllerTest extends DummyObject {
         joinReqDto.setFullName("abc");
 
         String content = mapper.writeValueAsString(joinReqDto);
-
         System.out.println("content = " + content);
 
         // when
@@ -57,6 +57,8 @@ public class MemberControllerTest extends DummyObject {
 
         // then
         resultActions.andExpect(status().isCreated());
+        String contentAsString = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("contentAsString = " + contentAsString);
     }
 
     @Test

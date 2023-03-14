@@ -79,6 +79,10 @@ public class Account {
         }
     }
 
+    public void resetPassword(Long password) {
+        this.password = password;
+    }
+
     public void withdraw(Long amount) {
         checkBalance(amount);
         balance -= amount;

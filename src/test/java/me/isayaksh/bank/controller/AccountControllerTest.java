@@ -2,6 +2,7 @@ package me.isayaksh.bank.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.isayaksh.bank.config.dummy.DummyObject;
+import me.isayaksh.bank.dto.account.AccountReqDto;
 import me.isayaksh.bank.dto.account.AccountReqDto.AccountDepositReqDto;
 import me.isayaksh.bank.dto.account.AccountReqDto.AccountTransferReqDto;
 import me.isayaksh.bank.dto.account.AccountReqDto.AccountWithdrawReqDto;
@@ -28,6 +29,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import javax.persistence.EntityManager;
 
+import static me.isayaksh.bank.dto.account.AccountReqDto.*;
 import static me.isayaksh.bank.dto.account.AccountReqDto.AccountRegisterReqDto;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -183,6 +185,25 @@ class AccountControllerTest extends DummyObject {
         System.out.println("responseBody = " + responseBody);
 
         // then
+        resultActions.andExpect(status().isOk());
+    }
+
+    @Test
+    @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    public void resetPassword_test() throws Exception {
+        // given
+        AccountResetPasswordReqDto dto = new AccountResetPasswordReqDto();
+        dto.setNumber(1111L);
+        dto.setPassword(1234L);
+        dto.setNewPassword(9753L);
+        String requestBody = mapper.writeValueAsString(dto);
+
+        // when
+        ResultActions resultActions = mvc.perform(post("/api/s/account/password").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+
+        // then
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("responseBody = " + responseBody);
         resultActions.andExpect(status().isOk());
     }
 

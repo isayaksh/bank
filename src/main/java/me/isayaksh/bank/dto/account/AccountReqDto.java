@@ -91,5 +91,21 @@ public class AccountReqDto {
 
     }
 
+    @Getter @Setter
+    public static class AccountResetPasswordReqDto {
+        @NotNull
+        @Digits(integer = 4, fraction = 4)
+        private Long number;
+
+        @NotNull
+        @Digits(integer = 4, fraction = 4)
+        private Long password;
+
+        @NotNull
+        @Digits(integer = 4, fraction = 4)
+        private Long newPassword;
+
+    }
+
 
 }

@@ -239,6 +239,16 @@ class AccountServiceTest extends DummyObject {
         assertThat(a2.getBalance()).isEqualTo(2100L);
     }
 
+    @Test
+    public void resetPassword_test() throws Exception {
+        // given
+        Account account = newAccount(1234L, 1234L, newMember("kim", "mj"));
+        // when
+        account.resetPassword(4321L);
+        // then
+        assertThat(account.getPassword()).isEqualTo(4321L);
+    }
+
 }
 
     ;

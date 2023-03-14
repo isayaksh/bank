@@ -1,10 +1,8 @@
 package me.isayaksh.bank.service;
 
 import lombok.RequiredArgsConstructor;
-import me.isayaksh.bank.dto.account.AccountReqDto.AccountDepositReqDto;
-import me.isayaksh.bank.dto.account.AccountReqDto.AccountRegisterReqDto;
-import me.isayaksh.bank.dto.account.AccountReqDto.AccountTransferReqDto;
-import me.isayaksh.bank.dto.account.AccountReqDto.AccountWithdrawReqDto;
+import me.isayaksh.bank.dto.account.AccountReqDto;
+import me.isayaksh.bank.dto.account.AccountReqDto.*;
 import me.isayaksh.bank.dto.account.AccountResDto.*;
 import me.isayaksh.bank.entity.account.Account;
 import me.isayaksh.bank.entity.member.Member;
@@ -162,6 +160,18 @@ public class AccountService {
         List<Transaction> transactionList = transactionRepository.findTransactionList(findAccount.getId(), "ALL", pageable.getPageNumber());
         return new AccountDetailResDto(findAccount, transactionList);
 
+    }
+
+    public AccountResetPasswordResDto resetPassword(AccountResetPasswordReqDto accountResetPasswordReqDto, Long memberId) {
+        // 계좌 번호로 계좌 조회
+        Account findAccount = findAccountByNumber(accountResetPasswordReqDto.getNumber());
+        // 계좌와 소유자 일치 여부 검증
+        findAccount.checkOwner(memberId);
+        // 계좌 비밀번호 일치 여부 검증
+        findAccount.checkPassword(accountResetPasswordReqDto.getPassword());
+        // 계좌 비밀번호 갱신
+        findAccount.resetPassword(accountResetPasswordReqDto.getNewPassword());
+        return new AccountResetPasswordResDto(findAccount);
     }
 
     private Member findMemberByMemberId(Long memberId) {

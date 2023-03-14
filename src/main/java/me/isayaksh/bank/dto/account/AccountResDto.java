@@ -219,4 +219,15 @@ public class AccountResDto {
         }
     }
 
+    @Getter @Setter
+    public static class AccountResetPasswordResDto {
+        private Long id;
+        private Long number;
+
+        public AccountResetPasswordResDto(Account account) {
+            this.id = account.getId();
+            this.number = account.getNumber();
+        }
+    }
+
 }
