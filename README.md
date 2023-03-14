@@ -25,7 +25,7 @@
 ## 🧷 기능 정리
 
 |기능|요청 URL|문서|테스트|
-|:-:|:-:|:-:|:-:|
+|:-:|:-|:-|:-:|
 |회원가입|`{SERVER}/api/join`|[회원가입 doc](https://github.com/isayaksh/bank/blob/master/docs/join.md)|O|
 |로그인|`{SERVER}/api/login`|[로그인 doc](https://github.com/isayaksh/bank/blob/master/docs/login.md)|O|
 |계좌등록|`{SERVER}/api/s/account`|[계좌등록 doc](https://github.com/isayaksh/bank/blob/master/docs/registerAccount.md)|O|
