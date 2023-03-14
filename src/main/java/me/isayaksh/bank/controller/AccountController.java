@@ -66,7 +66,7 @@ public class AccountController {
         return new ResponseEntity<>(new ResponseDto<>(1, "이체 성공", accountWithdrawResDto), HttpStatus.CREATED);
     }
 
-    @GetMapping("/s/account/{number}/")
+    @GetMapping("/s/account/{number}")
     public ResponseEntity<?> accountDetail(@PathVariable Long number,
                                            @AuthenticationPrincipal LoginMember loginMember,
                                            Pageable pageable) {
