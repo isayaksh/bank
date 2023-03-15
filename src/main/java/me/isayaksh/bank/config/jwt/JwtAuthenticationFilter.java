@@ -2,7 +2,7 @@ package me.isayaksh.bank.config.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.isayaksh.bank.config.auth.LoginMember;
-import me.isayaksh.bank.dto.member.MemberReqDto.LoginReqDto;
+import me.isayaksh.bank.dto.member.MemberReqDto.MemberLoginReqDto;
 import me.isayaksh.bank.dto.member.MemberResDto.MemberLoginResDto;
 import me.isayaksh.bank.util.CustomResponseUtil;
 import org.slf4j.Logger;
@@ -40,7 +40,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         try {
             ObjectMapper mapper = new ObjectMapper();
-            LoginReqDto loginReqDto = mapper.readValue(request.getInputStream(), LoginReqDto.class);
+            MemberLoginReqDto loginReqDto = mapper.readValue(request.getInputStream(), MemberLoginReqDto.class);
 
             // 강제 로그인
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginReqDto.getUsername(), loginReqDto.getPassword());
