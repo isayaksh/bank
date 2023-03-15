@@ -73,9 +73,10 @@ public class SecurityConfig {
         }));
 
         http.authorizeRequests()
-                .antMatchers("/api/s/**").authenticated()
+                // 유저 회원가입, 유저 로그인, 계좌 입금 모두 허용
+                .antMatchers("/api/members/join", "/api/members/login", "/api/accounts/deposit").permitAll()
                 .antMatchers("/api/admin/**").hasRole(ADMIN.toString())
-                .anyRequest().permitAll();
+                .anyRequest().authenticated();
 
         return http.build();
     }
