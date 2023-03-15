@@ -25,7 +25,7 @@
 ## 🧷 기능 정리
 
 |기능|요청 URL|문서|테스트|
-|:-:|:-|:-|:-:|
+|:-|:-|:-|:-|
 |유저 회원가입|`{SERVER}/api/member/join`|[유저 회원가입 doc](https://github.com/isayaksh/bank/blob/master/docs/memberJoin.md)|O|
 |유저 로그인|`{SERVER}/api/member/login`|[유저 로그인 doc](https://github.com/isayaksh/bank/blob/master/docs/memberLogin.md)|O|
 |유저 비밀번호 갱신|`{SERVER}/api/s/member/password`|[유저 비밀번호 갱신 doc](https://github.com/isayaksh/bank/blob/master/docs/memberResetPassword.md)|O|
