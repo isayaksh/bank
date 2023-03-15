@@ -3,7 +3,7 @@
 ### Request
 ```
 
-> POST /api/s/account HTTP/1.1
+> POST /api/accounts/register HTTP/1.1
 > Host: {SERVER}
 > Accept: */*
 > Content-Type: application/json; charset=UTF-8

@@ -3,7 +3,7 @@
 ### Request
 ```
 
-> POST /api/account/deposit HTTP/1.1
+> POST /api/accounts/deposit HTTP/1.1
 > Host: {SERVER}
 > Accept: */*
 > Content-Type: application/json; charset=UTF-8

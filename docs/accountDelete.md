@@ -3,7 +3,7 @@
 ### Request
 ```
 
-> DELETE /api/s/account/{number} HTTP/1.1
+> DELETE /api/accounts/{number} HTTP/1.1
 > Host: {SERVER}
 > Accept: */*
 > Content-Type: application/json; charset=UTF-8

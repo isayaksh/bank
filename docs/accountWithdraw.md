@@ -3,7 +3,7 @@
 ### Request
 ```
 
-> POST /api/s/account/withdraw HTTP/1.1
+> POST /api/accounts/withdraw HTTP/1.1
 > Host: {SERVER}
 > Accept: */*
 > Content-Type: application/json; charset=UTF-8

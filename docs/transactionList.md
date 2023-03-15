@@ -3,7 +3,7 @@
 ### Request
 ```
 
-> GET /api/s/account/{number}/transactions HTTP/1.1
+> GET /api/transactions/account/{number} HTTP/1.1
 > Host: {SERVER}
 > Accept: */*
 > Content-Type: application/json; charset=UTF-8
