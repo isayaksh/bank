@@ -25,7 +25,7 @@
 ```
 {
   "code": 1,
-  "msg": "로그인 성공",
+  "msg": "회원가입 성공",
   "data": {
     "id": Long,
     "username": "String",
