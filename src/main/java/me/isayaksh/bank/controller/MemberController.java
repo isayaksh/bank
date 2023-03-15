@@ -26,12 +26,12 @@ import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/members")
 public class MemberController {
 
     private final MemberService memberService;
 
-    @PostMapping("/member/join")
+    @PostMapping("/join")
     public ResponseEntity join(@RequestBody @Valid MemberJoinReqDto joinReqDto, BindingResult bindingResult){
 
         if(bindingResult.hasErrors()){
@@ -46,7 +46,7 @@ public class MemberController {
         return new ResponseEntity<>(new ResponseDto<>(1, "회원가입 성공", savedMember), CREATED);
     }
 
-    @PostMapping("/s/member/password")
+    @PostMapping("/reset-password")
     public ResponseEntity<?> resetPassword(@RequestBody @Valid MemberResetPasswordReqDto memberResetPasswordReqDto, BindingResult bindingResult,
                                            @AuthenticationPrincipal LoginMember loginMember) {
         MemberResetPasswordResDto memberResetPasswordResDto = memberService.resetPassword(memberResetPasswordReqDto, loginMember.getMember().getId());

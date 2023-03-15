@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/transactions")
 public class TransactionController {
 
     private final TransactionService transactionService;
 
-    @GetMapping("/s/account/{number}/transactions")
+    @GetMapping("/account/{number}")
     public ResponseEntity<?> transactionList(@PathVariable Long number,
                                              @RequestParam(value = "status", defaultValue = "ALL") String status,
                                              Pageable pageable,
