@@ -60,7 +60,7 @@ class JwtAuthorizationFilterTest {
         // when
         ResultActions resultActions = mvc.perform(get("/api/admin/hello").header(JwtVO.HEADER, jwt));
         // then
-        resultActions.andExpect(status().isNotFound());
+        resultActions.andExpect(status().isForbidden());
 
         // given
         Member member1 = Member.builder().id(1L).role(MemberRole.CUSTOMER).build();

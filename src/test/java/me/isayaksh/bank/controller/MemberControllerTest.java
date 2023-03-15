@@ -57,7 +57,7 @@ public class MemberControllerTest extends DummyObject {
         System.out.println("content = " + content);
 
         // when
-        ResultActions resultActions = mvc.perform(post("/api/join").content(content).contentType(MediaType.APPLICATION_JSON));
+        ResultActions resultActions = mvc.perform(post("/api/member/join").content(content).contentType(MediaType.APPLICATION_JSON));
 
         // then
         resultActions.andExpect(status().isCreated());
