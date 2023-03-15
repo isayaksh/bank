@@ -3,7 +3,7 @@
 ### Request
 ```
 
-> POST /api/member/password HTTP/1.1
+> POST /api/s/member/password HTTP/1.1
 > Host: {SERVER}
 > Accept: */*
 > Content-Type: application/json; charset=UTF-8
