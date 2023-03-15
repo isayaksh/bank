@@ -3,6 +3,7 @@ package me.isayaksh.bank.entity.member;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import me.isayaksh.bank.handler.ex.CustomApiException;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -57,5 +58,21 @@ public class Member {
         this.role = role;
         this.createAt = createAt;
         this.updateAt = updateAt;
+    }
+
+    public void checkId(Long id) {
+        if (!this.id.equals(id)) {
+            throw new CustomApiException("아이디가 일치하지 않습니다.");
+        }
+    }
+
+    public void checkPassword(String password) {
+        if (this.password.equals(password)) {
+            throw new CustomApiException("패스워드가 일치하지 않습니다.");
+        }
+    }
+
+    public void updatePassword(String newPassword) {
+        this.password = newPassword;
     }
 }

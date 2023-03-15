@@ -1,12 +1,11 @@
 package me.isayaksh.bank.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import me.isayaksh.bank.config.dummy.DummyObject;
-import me.isayaksh.bank.dto.member.MemberReqDto.JoinReqDto;
-import me.isayaksh.bank.entity.member.Member;
+import me.isayaksh.bank.dto.member.MemberReqDto;
+import me.isayaksh.bank.dto.member.MemberReqDto.MemberJoinReqDto;
+import me.isayaksh.bank.dto.member.MemberReqDto.MemberResetPasswordReqDto;
 import me.isayaksh.bank.repository.MemberRepository;
-import org.aspectj.lang.annotation.After;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,16 +13,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.TestExecutionEvent;
+import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.mockito.Mockito.*;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.MOCK;
 
-@AutoConfigureMockMvc()
-@SpringBootTest(webEnvironment = MOCK)
+@AutoConfigureMockMvc
+@ActiveProfiles("test")
+@Sql("classpath:db/teardown.sql")
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 public class MemberControllerTest extends DummyObject {
 
     @Autowired private MockMvc mvc;
@@ -43,7 +47,7 @@ public class MemberControllerTest extends DummyObject {
     @Test
     public void join_success_test() throws Exception {
         // given
-        JoinReqDto joinReqDto = new JoinReqDto();
+        MemberJoinReqDto joinReqDto = new MemberJoinReqDto();
         joinReqDto.setUsername("newUser");
         joinReqDto.setEmail("qwerty@gmail.com");
         joinReqDto.setPassword("1234");
@@ -64,7 +68,7 @@ public class MemberControllerTest extends DummyObject {
     @Test
     public void join_fail_test() throws Exception {
         // given
-        JoinReqDto joinReqDto = new JoinReqDto();
+        MemberJoinReqDto joinReqDto = new MemberJoinReqDto();
         joinReqDto.setUsername("qwe");
         joinReqDto.setEmail("user@gmail.com");
         joinReqDto.setPassword("1234");
@@ -73,14 +77,33 @@ public class MemberControllerTest extends DummyObject {
         String content = mapper.writeValueAsString(joinReqDto);
 
         // when
-        ResultActions resultActions = mvc.perform(post("/api/join").content(content).contentType(MediaType.APPLICATION_JSON));
+        ResultActions resultActions = mvc.perform(post("/api/member/join").content(content).contentType(MediaType.APPLICATION_JSON));
 
         // then
         resultActions.andExpect(status().isCreated());
     }
 
+    @Test
+    @WithUserDetails(value = "ssar", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    public void resetPassword_test() throws Exception {
+        // given
+        MemberResetPasswordReqDto memberResetPasswordReqDto = new MemberResetPasswordReqDto();
+        memberResetPasswordReqDto.setUsername("ssar");
+        memberResetPasswordReqDto.setPassword("1234");
+        memberResetPasswordReqDto.setNewPassword("4321");
+        String requestBody = mapper.writeValueAsString(memberResetPasswordReqDto);
+
+        // when
+        ResultActions resultActions = mvc.perform(post("/api/s/member/password").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+
+        // then
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("responseBody = " + responseBody);
+        resultActions.andExpect(status().isOk());
+    }
+
     private void dataSetting() throws Exception{
-        memberRepository.save(newMember("username", "userFullName"));
+        memberRepository.save(newMember("ssar", "userFullName"));
     }
 
     private void dataClear() throws Exception{

@@ -14,7 +14,7 @@ import static me.isayaksh.bank.entity.member.MemberRole.CUSTOMER;
 public class MemberReqDto {
     @Getter
     @Setter
-    public static class JoinReqDto {
+    public static class MemberJoinReqDto {
 
         @NotEmpty(message = "username은 필수입니다")
         @Pattern(regexp = "^[a-zA-Z0-9]{2,20}$", message = "영문/숫자 2~20자 이내로 작성해주세요.")
@@ -47,7 +47,27 @@ public class MemberReqDto {
     @Getter
     @Setter
     public static class LoginReqDto {
+        @NotEmpty(message = "username은 필수입니다")
+        @Pattern(regexp = "^[a-zA-Z0-9]{2,20}$", message = "영문/숫자 2~20자 이내로 작성해주세요.")
         private String username;
+
+        @NotEmpty(message = "password는 필수입니다")
+        @Size(min = 4, max = 20) // 패스워드 인코딩 때문에
         private String password;
+    }
+
+    @Getter @Setter
+    public static class MemberResetPasswordReqDto {
+        @NotEmpty(message = "username은 필수입니다")
+        @Pattern(regexp = "^[a-zA-Z0-9]{2,20}$", message = "영문/숫자 2~20자 이내로 작성해주세요.")
+        private String username;
+
+        @NotEmpty(message = "password는 필수입니다")
+        @Size(min = 4, max = 20) // 패스워드 인코딩 때문에
+        private String password;
+
+        @NotEmpty(message = "newPassword는 필수입니다")
+        @Size(min = 4, max = 20) // 패스워드 인코딩 때문에
+        private String newPassword;
     }
 }

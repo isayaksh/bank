@@ -10,12 +10,12 @@ public class MemberResDto {
 
     @Getter
     @Setter
-    public static class LoginResDto {
+    public static class MemberLoginResDto {
         private Long id;
         private String username;
         private String createdAt;
 
-        public LoginResDto(Member member) {
+        public MemberLoginResDto(Member member) {
             this.id = member.getId();
             this.username = member.getUsername();
             this.createdAt = CustomDateUtil.toStringFormat(member.getCreateAt());
@@ -25,15 +25,29 @@ public class MemberResDto {
     @Getter
     @Setter
     @ToString
-    public static class JoinRespDto {
+    public static class MemberJoinRespDto {
         private Long id;
         private String username;
         private String fullName;
 
-        public JoinRespDto(Member member) {
+        public MemberJoinRespDto(Member member) {
             this.id = member.getId();
             this.username = member.getUsername();
             this.fullName = member.getFullName();
         }
+    }
+
+    @Getter @Setter
+    public static class MemberResetPasswordResDto {
+        private Long id;
+        private String username;
+        private String fullName;
+
+        public MemberResetPasswordResDto(Member member) {
+            this.id = member.getId();
+            this.username = member.getUsername();
+            this.fullName = member.getFullName();
+        }
+
     }
 }

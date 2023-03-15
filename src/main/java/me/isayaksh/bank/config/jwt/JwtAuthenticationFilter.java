@@ -3,7 +3,7 @@ package me.isayaksh.bank.config.jwt;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.isayaksh.bank.config.auth.LoginMember;
 import me.isayaksh.bank.dto.member.MemberReqDto.LoginReqDto;
-import me.isayaksh.bank.dto.member.MemberResDto.LoginResDto;
+import me.isayaksh.bank.dto.member.MemberResDto.MemberLoginResDto;
 import me.isayaksh.bank.util.CustomResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,7 +70,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         LoginMember loginMember = (LoginMember) authResult.getPrincipal();
         String jwt = JwtProcess.create(loginMember);
         response.addHeader(JwtVO.HEADER, jwt);
-        LoginResDto loginResDto = new LoginResDto(loginMember.getMember());
+        MemberLoginResDto loginResDto = new MemberLoginResDto(loginMember.getMember());
         CustomResponseUtil.success(response, loginResDto);
 
     }
