@@ -70,7 +70,7 @@ class AccountControllerTest extends DummyObject {
         System.out.println("requestBody = " + requestBody);
 
         // when
-        ResultActions resultActions = mvc.perform(post("/api/s/account").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+        ResultActions resultActions = mvc.perform(post("/api/accounts/register").content(requestBody).contentType(MediaType.APPLICATION_JSON));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("responseBody = " + responseBody);
 
@@ -84,7 +84,7 @@ class AccountControllerTest extends DummyObject {
         // given
 
         // when
-        ResultActions resultActions = mvc.perform(get("/api/s/account/login-user"));
+        ResultActions resultActions = mvc.perform(get("/api/accounts/login-user"));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("responseBody = " + responseBody);
 
@@ -98,7 +98,7 @@ class AccountControllerTest extends DummyObject {
         // given
 
         // when
-        ResultActions resultActions = mvc.perform(delete("/api/s/account/" + 7282));
+        ResultActions resultActions = mvc.perform(delete("/api/accounts/" + 7282));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("responseBody = " + responseBody);
 
@@ -123,7 +123,7 @@ class AccountControllerTest extends DummyObject {
         String requestBody = mapper.writeValueAsString(dto);
 
         // when
-        ResultActions resultActions = mvc.perform(post("/api/account/deposit").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+        ResultActions resultActions = mvc.perform(post("/api/accounts/deposit").content(requestBody).contentType(MediaType.APPLICATION_JSON));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("responseBody = " + responseBody);
 
@@ -143,7 +143,7 @@ class AccountControllerTest extends DummyObject {
         String requestBody = mapper.writeValueAsString(dto);
         // when
 
-        ResultActions resultActions = mvc.perform(post("/api/s/account/withdraw").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+        ResultActions resultActions = mvc.perform(post("/api/accounts/withdraw").content(requestBody).contentType(MediaType.APPLICATION_JSON));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("responseBody = " + responseBody);
         // then
@@ -164,7 +164,7 @@ class AccountControllerTest extends DummyObject {
         String requestBody = mapper.writeValueAsString(reqDto);
 
         // when
-        ResultActions resultActions = mvc.perform(post("/api/s/account/transfer").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+        ResultActions resultActions = mvc.perform(post("/api/accounts/transfer").content(requestBody).contentType(MediaType.APPLICATION_JSON));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("responseBody = " + responseBody);
 
@@ -180,7 +180,7 @@ class AccountControllerTest extends DummyObject {
         String status = "ALL";
 
         // when
-        ResultActions resultActions = mvc.perform(get("/api/s/account/"+number+"/transactions").param("status", status));
+        ResultActions resultActions = mvc.perform(get("/api/accounts/"+number).param("status", status));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("responseBody = " + responseBody);
 
@@ -199,7 +199,7 @@ class AccountControllerTest extends DummyObject {
         String requestBody = mapper.writeValueAsString(dto);
 
         // when
-        ResultActions resultActions = mvc.perform(post("/api/s/account/password").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+        ResultActions resultActions = mvc.perform(post("/api/accounts/reset-password").content(requestBody).contentType(MediaType.APPLICATION_JSON));
 
         // then
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();

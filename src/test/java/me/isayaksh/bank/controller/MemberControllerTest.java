@@ -2,11 +2,14 @@ package me.isayaksh.bank.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.isayaksh.bank.config.dummy.DummyObject;
+import me.isayaksh.bank.config.jwt.JwtVO;
 import me.isayaksh.bank.dto.member.MemberReqDto;
 import me.isayaksh.bank.dto.member.MemberReqDto.MemberJoinReqDto;
+import me.isayaksh.bank.dto.member.MemberReqDto.MemberLoginReqDto;
 import me.isayaksh.bank.dto.member.MemberReqDto.MemberResetPasswordReqDto;
 import me.isayaksh.bank.repository.MemberRepository;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +60,7 @@ public class MemberControllerTest extends DummyObject {
         System.out.println("content = " + content);
 
         // when
-        ResultActions resultActions = mvc.perform(post("/api/member/join").content(content).contentType(MediaType.APPLICATION_JSON));
+        ResultActions resultActions = mvc.perform(post("/api/members/join").content(content).contentType(MediaType.APPLICATION_JSON));
 
         // then
         resultActions.andExpect(status().isCreated());
@@ -77,10 +80,26 @@ public class MemberControllerTest extends DummyObject {
         String content = mapper.writeValueAsString(joinReqDto);
 
         // when
-        ResultActions resultActions = mvc.perform(post("/api/member/join").content(content).contentType(MediaType.APPLICATION_JSON));
+        ResultActions resultActions = mvc.perform(post("/api/members/join").content(content).contentType(MediaType.APPLICATION_JSON));
 
         // then
         resultActions.andExpect(status().isCreated());
+    }
+
+    @Test
+    public void login_test() throws Exception {
+        // given
+        MemberLoginReqDto memberLoginReqDto = new MemberLoginReqDto();
+        memberLoginReqDto.setUsername("ssar");
+        memberLoginReqDto.setPassword("1234");
+        String requestBody = mapper.writeValueAsString(memberLoginReqDto);
+        // when
+        ResultActions resultActions = mvc.perform(post("/api/members/login").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+        String jwt = resultActions.andReturn().getResponse().getHeader("Authorization");
+        System.out.println("jwt = " + jwt);
+        // then
+        Assertions.assertTrue(jwt.startsWith(JwtVO.TOKEN_PREFIX));
+        resultActions.andExpect(status().isOk());
     }
 
     @Test
@@ -94,7 +113,7 @@ public class MemberControllerTest extends DummyObject {
         String requestBody = mapper.writeValueAsString(memberResetPasswordReqDto);
 
         // when
-        ResultActions resultActions = mvc.perform(post("/api/s/member/password").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+        ResultActions resultActions = mvc.perform(post("/api/members/reset-password").content(requestBody).contentType(MediaType.APPLICATION_JSON));
 
         // then
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();

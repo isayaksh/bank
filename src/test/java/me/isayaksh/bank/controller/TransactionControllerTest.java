@@ -57,7 +57,7 @@ class TransactionControllerTest extends DummyObject {
         String status = "ALL";
 
         // when
-        ResultActions resultActions = mvc.perform(get("/api/s/account/"+number+"/transactions").param("status", status));
+        ResultActions resultActions = mvc.perform(get("/api/transactions/account/"+number).param("status", status));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("responseBody = " + responseBody);
 

@@ -2,7 +2,7 @@ package me.isayaksh.bank.config.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.isayaksh.bank.config.dummy.DummyObject;
-import me.isayaksh.bank.dto.member.MemberReqDto.LoginReqDto;
+import me.isayaksh.bank.dto.member.MemberReqDto.MemberLoginReqDto;
 import me.isayaksh.bank.repository.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,7 +39,7 @@ class JwtAuthenticationFilterTest extends DummyObject {
     @Test
     public void successfulAuthentication_test() throws Exception {
         // given
-        LoginReqDto loginReqDto = new LoginReqDto();
+        MemberLoginReqDto loginReqDto = new MemberLoginReqDto();
         loginReqDto.setUsername("ssar");
         loginReqDto.setPassword("1234");
 
@@ -47,7 +47,7 @@ class JwtAuthenticationFilterTest extends DummyObject {
         System.out.println("requestBody = " + requestBody);
 
         // when
-        ResultActions resultActions = mvc.perform(post("/api/login").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+        ResultActions resultActions = mvc.perform(post("/api/members/login").content(requestBody).contentType(MediaType.APPLICATION_JSON));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("responseBody = " + responseBody);
 
@@ -63,7 +63,7 @@ class JwtAuthenticationFilterTest extends DummyObject {
     @Test
     public void unsuccessfulAuthentication_test() throws Exception {
         // given
-        LoginReqDto loginReqDto = new LoginReqDto();
+        MemberLoginReqDto loginReqDto = new MemberLoginReqDto();
         loginReqDto.setUsername("ssar");
         loginReqDto.setPassword("12345");
 
