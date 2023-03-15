@@ -6,7 +6,7 @@
 > POST /api/join HTTP/1.1
 > Host: {SERVER}
 > Accept: */*
-> Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+> Content-Type: application/json; charset=UTF-8
 
 ```
 

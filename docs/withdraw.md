@@ -6,7 +6,7 @@
 > POST /api/s/account/withdraw HTTP/1.1
 > Host: {SERVER}
 > Accept: */*
-> Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+> Content-Type: application/json; charset=UTF-8
 > Authorization: {JWT}
 
 ```
