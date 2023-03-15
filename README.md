@@ -24,15 +24,15 @@
 #
 ## 🧷 기능 정리
 
-|기능|요청 URL|문서|테스트|
+|기능|요청 URL|문서|JWT|
 |:-|:-|:-|:-|
-|유저 회원가입|`{SERVER}/api/members/join`|[유저 회원가입 doc](https://github.com/isayaksh/bank/blob/master/docs/memberJoin.md)|O|
-|유저 로그인|`{SERVER}/api/members/login`|[유저 로그인 doc](https://github.com/isayaksh/bank/blob/master/docs/memberLogin.md)|O|
+|유저 회원가입|`{SERVER}/api/members/join`|[유저 회원가입 doc](https://github.com/isayaksh/bank/blob/master/docs/memberJoin.md)|X|
+|유저 로그인|`{SERVER}/api/members/login`|[유저 로그인 doc](https://github.com/isayaksh/bank/blob/master/docs/memberLogin.md)|X|
 |유저 비밀번호 갱신|`{SERVER}/api/members/reset-password`|[유저 비밀번호 갱신 doc](https://github.com/isayaksh/bank/blob/master/docs/memberResetPassword.md)|O|
 |계좌 등록|`{SERVER}/api/accounts/register`|[계좌 등록 doc](https://github.com/isayaksh/bank/blob/master/docs/accountRegister.md)|O|
 |계좌 목록 조회|`{SERVER}/api/accounts/login-user`|[계좌 목록 조회 doc](https://github.com/isayaksh/bank/blob/master/docs/accountList.md)|O|
 |계좌 삭제|`{SERVER}/api/accounts/{number}`|[계좌 삭제 doc](https://github.com/isayaksh/bank/blob/master/docs/accountDelete.md)|O|
-|계좌 입금|`{SERVER}/api/accounts/deposit`|[계좌 입금 doc](https://github.com/isayaksh/bank/blob/master/docs/accountDeposit.md)|O|
+|계좌 입금|`{SERVER}/api/accounts/deposit`|[계좌 입금 doc](https://github.com/isayaksh/bank/blob/master/docs/accountDeposit.md)|X|
 |계좌 출금|`{SERVER}/api/accounts/withdraw`|[계좌 출금 doc](https://github.com/isayaksh/bank/blob/master/docs/accountWithdraw.md)|O|
 |계좌 이체|`{SERVER}/api/accounts/transfer`|[계좌 이체 doc](https://github.com/isayaksh/bank/blob/master/docs/accountTransfer.md)|O|
 |계좌 상세보기|`{SERVER}/api/accounts/{number}`|[계좌 상세보기 doc](https://github.com/isayaksh/bank/blob/master/docs/accountDetail.md)|O|
