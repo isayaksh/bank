@@ -46,7 +46,7 @@ public class MemberReqDto {
 
     @Getter
     @Setter
-    public static class LoginReqDto {
+    public static class MemberLoginReqDto {
         @NotEmpty(message = "username은 필수입니다")
         @Pattern(regexp = "^[a-zA-Z0-9]{2,20}$", message = "영문/숫자 2~20자 이내로 작성해주세요.")
         private String username;
